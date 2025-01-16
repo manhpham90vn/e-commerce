@@ -90,8 +90,17 @@ export const refresh = catchAsync(async (req, res, next) => {
   await prisma.session.update({
     where: { id: session.id },
     data: {
+      deleted_at: new Date(),
+    },
+  });
+
+  await prisma.session.create({
+    data: {
+      user_id: user.id,
       token: accessToken,
       refresh_token: refreshToken,
+      ip_address: req.headers["x-forwarded-for"] || req.ip || "unknown ip",
+      user_agent: req.headers["user-agent"] || "unknown user-agent",
     },
   });
 
@@ -104,7 +113,7 @@ const generateToken = (user) => {
     "minutes"
   );
   const accessTokenPayload = {
-    id: user.id,
+    user_id: user.id,
     iat: moment().unix(),
     exp: accessTokenExpires.unix(),
     type: tokenTypes.ACCESS_TOKEN,
@@ -116,7 +125,7 @@ const generateToken = (user) => {
     "minutes"
   );
   const refreshTokenPayload = {
-    id: user.id,
+    user_id: user.id,
     iat: moment().unix(),
     exp: refreshTokenExpires.unix(),
     type: tokenTypes.REFRESH_TOKEN,

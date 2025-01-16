@@ -1,6 +1,7 @@
 import Joi from "joi";
 import passport from "passport";
 import { UnauthorizedError, ValidationError } from "./constants.js";
+import prisma from "./database.js";
 import { pick } from "./utils.js";
 
 export const errorHandler = (err, req, res, next) => {
@@ -36,8 +37,17 @@ export const validate = (schema) => (req, res, next) => {
 
 const verifyCallback = (req, resolve, reject) => async (err, user, info) => {
   if (err || !user || info) {
-    return reject(new UnauthorizedError("Invalid token"));
+    return reject(new UnauthorizedError("Invalid token or user"));
   }
+
+  const token = req.headers.authorization.split(" ")[1];
+  const session = await prisma.session.findFirst({
+    where: { token, deleted_at: null },
+  });
+  if (!session) {
+    return reject(new UnauthorizedError("Token not found"));
+  }
+
   req.user = user;
 
   resolve();
