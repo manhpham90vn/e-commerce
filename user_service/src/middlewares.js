@@ -42,13 +42,14 @@ const verifyCallback = (req, resolve, reject) => async (err, user, info) => {
 
   const token = req.headers.authorization.split(" ")[1];
   const session = await prisma.session.findFirst({
-    where: { token, deleted_at: null },
+    where: { user_id: user.id, token, deleted_at: null },
   });
   if (!session) {
     return reject(new UnauthorizedError("Token not found"));
   }
 
   req.user = user;
+  req.session = session;
 
   resolve();
 };

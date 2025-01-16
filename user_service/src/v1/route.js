@@ -20,6 +20,13 @@ v1Router.post("/register", validate(register), registerController);
 
 v1Router.post("/login", validate(login), loginController);
 
-v1Router.post("/refresh", auth(), validate(refresh), refreshController);
+v1Router.post("/refresh", validate(refresh), refreshController);
+
+v1Router.get("/me", auth(), async (req, res) => {
+  delete req.user.password_hash;
+  res
+    .status(StatusCodes.OK)
+    .json({ data: { user: req.user, session: req.session } });
+});
 
 export default v1Router;

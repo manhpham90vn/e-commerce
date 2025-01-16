@@ -2,7 +2,11 @@ import bcrypt from "bcryptjs";
 import { StatusCodes } from "http-status-codes";
 import jwt from "jsonwebtoken";
 import moment from "moment";
-import { tokenTypes, ValidationError } from "../constants.js";
+import {
+  tokenTypes,
+  ValidationError,
+  UnauthorizedError,
+} from "../constants.js";
 import prisma from "../database.js";
 import { catchAsync } from "../utils.js";
 
@@ -75,17 +79,25 @@ export const login = catchAsync(async (req, res, next) => {
 
 export const refresh = catchAsync(async (req, res, next) => {
   const { token } = req.body;
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-  const session = await prisma.session.findFirst({
-    where: { refresh_token: token },
-  });
-  if (!session) {
-    throw new ValidationError("Invalid refresh token");
+  if (decoded.type !== tokenTypes.REFRESH_TOKEN) {
+    throw new UnauthorizedError("Invalid token type");
   }
 
-  const user = await prisma.user.findFirst({ where: { id: session.user_id } });
+  const user = await prisma.user.findFirst({
+    where: { id: decoded.user_id, deleted_at: null },
+  });
+  if (!user) {
+    throw new UnauthorizedError("Invalid user");
+  }
 
-  const { accessToken, refreshToken } = generateToken(user);
+  const session = await prisma.session.findFirst({
+    where: { user_id: user.id, refresh_token: token, deleted_at: null },
+  });
+  if (!session) {
+    throw new UnauthorizedError("Invalid session");
+  }
 
   await prisma.session.update({
     where: { id: session.id },
@@ -93,6 +105,8 @@ export const refresh = catchAsync(async (req, res, next) => {
       deleted_at: new Date(),
     },
   });
+
+  const { accessToken, refreshToken } = generateToken(user);
 
   await prisma.session.create({
     data: {
