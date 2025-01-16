@@ -1,9 +1,9 @@
-import express from "express";
-import "dotenv/config";
-import passport from "passport";
-import { jwtStrategy, corsOptions } from "./utils.js";
 import cors from "cors";
+import "dotenv/config";
+import express from "express";
+import passport from "passport";
 import { errorHandler } from "./middlewares.js";
+import { corsOptions, jwtStrategy } from "./utils.js";
 import v1Router from "./v1/route.js";
 
 const app = express();

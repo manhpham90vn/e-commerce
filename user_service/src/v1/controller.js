@@ -1,19 +1,17 @@
-import prisma from "../database.js";
 import bcrypt from "bcryptjs";
-import moment from "moment";
-import { tokenTypes } from "../constants.js";
-import { catchAsync } from "../utils.js";
 import { StatusCodes } from "http-status-codes";
 import jwt from "jsonwebtoken";
+import moment from "moment";
+import { tokenTypes, ValidationError } from "../constants.js";
+import prisma from "../database.js";
+import { catchAsync } from "../utils.js";
 
-export const register = catchAsync(async (req, res) => {
+export const register = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
-  const existingUser = await prisma.user.findFirst({ where: { email } });
 
+  const existingUser = await prisma.user.findFirst({ where: { email } });
   if (existingUser) {
-    return res.status(StatusCodes.CONFLICT).json({
-      message: "User already exists",
-    });
+    throw new ValidationError("Email already exists");
   }
 
   const user = await prisma.user.create({
@@ -22,9 +20,85 @@ export const register = catchAsync(async (req, res) => {
       password_hash: await bcrypt.hash(password, 10),
     },
   });
+  delete user.password_hash;
+
+  const { accessToken, refreshToken } = generateToken(user);
+
+  await prisma.session.create({
+    data: {
+      user_id: user.id,
+      token: accessToken,
+      refresh_token: refreshToken,
+      ip_address: req.headers["x-forwarded-for"] || req.ip || "unknown ip",
+      user_agent: req.headers["user-agent"] || "unknown user-agent",
+    },
+  });
+
+  return res.status(StatusCodes.CREATED).json({
+    data: user,
+    accessToken,
+    refreshToken,
+  });
+});
+
+export const login = catchAsync(async (req, res, next) => {
+  const { email, password } = req.body;
+
+  const user = await prisma.user.findFirst({ where: { email } });
+  if (!user) {
+    throw new ValidationError("Invalid email or password");
+  }
+
+  const isPasswordMatch = await bcrypt.compare(password, user.password_hash);
+  if (!isPasswordMatch) {
+    throw new ValidationError("Invalid email or password");
+  }
 
   delete user.password_hash;
 
+  const { accessToken, refreshToken } = generateToken(user);
+
+  await prisma.session.create({
+    data: {
+      user_id: user.id,
+      token: accessToken,
+      refresh_token: refreshToken,
+      ip_address: req.headers["x-forwarded-for"] || req.ip || "unknown ip",
+      user_agent: req.headers["user-agent"] || "unknown user-agent",
+    },
+  });
+
+  return res
+    .status(StatusCodes.OK)
+    .json({ data: user, accessToken, refreshToken });
+});
+
+export const refresh = catchAsync(async (req, res, next) => {
+  const { token } = req.body;
+
+  const session = await prisma.session.findFirst({
+    where: { refresh_token: token },
+  });
+  if (!session) {
+    throw new ValidationError("Invalid refresh token");
+  }
+
+  const user = await prisma.user.findFirst({ where: { id: session.user_id } });
+
+  const { accessToken, refreshToken } = generateToken(user);
+
+  await prisma.session.update({
+    where: { id: session.id },
+    data: {
+      token: accessToken,
+      refresh_token: refreshToken,
+    },
+  });
+
+  return res.status(StatusCodes.OK).json({ accessToken, refreshToken });
+});
+
+const generateToken = (user) => {
   const accessTokenExpires = moment().add(
     process.env.JWT_ACCESS_EXPIRATION_MINUTES,
     "minutes"
@@ -49,21 +123,5 @@ export const register = catchAsync(async (req, res) => {
   };
   const refreshToken = jwt.sign(refreshTokenPayload, process.env.JWT_SECRET);
 
-  await prisma.session.create({
-    data: {
-      user_id: user.id,
-      token: accessToken,
-      refresh_token: refreshToken,
-      ip_address: req.headers["x-forwarded-for"] || req.ip || "unknown ip",
-      user_agent: req.headers["user-agent"] || "unknown user-agent",
-    },
-  });
-
-  return res.status(StatusCodes.CREATED).json({
-    data: user,
-    token: {
-      accessToken,
-      refreshToken,
-    },
-  });
-});
+  return { accessToken, refreshToken };
+};
