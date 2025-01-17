@@ -16,7 +16,7 @@ import {
 } from "../repository/userRepository.js";
 import catchAsync from "../utils/catchAsync.js";
 
-export const register = catchAsync(async (req, res, next) => {
+const register = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
 
   const existingUser = await findUserByConditions({ email });
@@ -41,7 +41,7 @@ export const register = catchAsync(async (req, res, next) => {
   return successResponse(res, { user, accessToken, refreshToken });
 });
 
-export const login = catchAsync(async (req, res, next) => {
+const login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
 
   const user = await findUserByConditions({ email });
@@ -68,7 +68,7 @@ export const login = catchAsync(async (req, res, next) => {
   return successResponse(res, { user, accessToken, refreshToken });
 });
 
-export const refresh = catchAsync(async (req, res, next) => {
+const refresh = catchAsync(async (req, res, next) => {
   const { token } = req.body;
   const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
@@ -107,3 +107,44 @@ export const refresh = catchAsync(async (req, res, next) => {
 
   return successResponse(res, { accessToken, refreshToken });
 });
+
+const logOut = catchAsync(async (req, res, next) => {
+  const { session } = req;
+
+  await updateSession(session.id, { deleted_at: new Date() });
+  return successResponse(res, null, "Logout success");
+});
+
+const verifyToken = catchAsync(async (req, res, next) => {
+  const token = req.headers.authorization.split(" ")[1];
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+  if (decoded.type !== tokenTypes.ACCESS_TOKEN) {
+    throw new UnauthorizedError("Invalid token type");
+  }
+
+  const user = await findUserByConditions({
+    id: decoded.user_id,
+    deleted_at: null,
+  });
+  if (!user) {
+    throw new UnauthorizedError("Invalid user");
+  }
+  delete user.password_hash;
+
+  const session = await findSessionByConditions({
+    user_id: user.id,
+    token: token,
+    deleted_at: null,
+  });
+  if (!session) {
+    throw new UnauthorizedError("Invalid session");
+  }
+  return successResponse(res, user);
+});
+
+const me = catchAsync(async (req, res, next) => {
+  return successResponse(res, { user: req.user, session: req.session });
+});
+
+export { register, login, refresh, logOut, verifyToken, me };

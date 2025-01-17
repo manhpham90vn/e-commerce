@@ -7,6 +7,9 @@ import {
   login as loginController,
   refresh as refreshController,
   register as registerController,
+  logOut as logOutController,
+  me as meController,
+  verifyToken as verifyTokenController,
 } from "./controller.js";
 import { login, refresh, register } from "./validation.js";
 
@@ -23,9 +26,10 @@ v1Router.post("/login", validate(login), loginController);
 
 v1Router.post("/refresh", validate(refresh), refreshController);
 
-v1Router.get("/me", auth(), async (req, res) => {
-  delete req.user.password_hash;
-  return successResponse(res, { user: req.user, session: req.session });
-});
+v1Router.get("/logout", auth(), logOutController);
+
+v1Router.get("/verify-token", verifyTokenController);
+
+v1Router.get("/me", auth(), meController);
 
 export default v1Router;
