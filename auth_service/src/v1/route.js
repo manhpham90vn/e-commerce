@@ -1,7 +1,8 @@
 import express from "express";
-import { successResponse } from "../constants.js";
-import prisma from "../database.js";
-import { auth, validate } from "../middlewares.js";
+import successResponse from "../common/successResponse.js";
+import prisma from "../configs/database.js";
+import auth from "../middleware/auth.js";
+import validate from "../middleware/validate.js";
 import {
   login as loginController,
   refresh as refreshController,
