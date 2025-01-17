@@ -30,7 +30,7 @@ export const jwtStrategy = new Strategy(jwtOptions, jwtVerify);
 
 export const corsOptions = {
   origin: function (origin, callback) {
-    if (process.env.NODE_ENV === "dev" || !origin) {
+    if (!origin) {
       return callback(null, true);
     }
 
