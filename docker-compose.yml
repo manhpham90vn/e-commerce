@@ -1,9 +1,9 @@
 services:
-  user_service_database:
+  auth_service_database:
     image: mysql:8.0
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: user_service
+      MYSQL_ROOT_PASSWORD: toor
+      MYSQL_DATABASE: auth_service
       MYSQL_USER: admin
       MYSQL_PASSWORD: admin
     ports:

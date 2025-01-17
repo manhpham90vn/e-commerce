@@ -37,7 +37,7 @@ export const validate = (schema) => (req, res, next) => {
 
 const verifyCallback = (req, resolve, reject) => async (err, user, info) => {
   if (err || !user || info) {
-    return reject(new UnauthorizedError("Invalid token or user"));
+    return reject(new UnauthorizedError("Invalid token"));
   }
 
   const token = req.headers.authorization.split(" ")[1];

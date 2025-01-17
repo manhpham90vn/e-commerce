@@ -5,6 +5,15 @@ export const tokenTypes = {
   REFRESH_TOKEN: "REFRESH_TOKEN",
 };
 
+export const successResponse = (res, data = null, message = null) => {
+  const json = {
+    status: StatusCodes.OK,
+    data,
+    message,
+  };
+  res.status(StatusCodes.OK).json({ ...json });
+};
+
 export class ValidationError extends Error {
   status = StatusCodes.UNPROCESSABLE_ENTITY;
   constructor(message) {

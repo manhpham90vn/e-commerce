@@ -1,5 +1,5 @@
 import express from "express";
-import StatusCodes from "http-status-codes";
+import { successResponse } from "../constants.js";
 import prisma from "../database.js";
 import { auth, validate } from "../middlewares.js";
 import {
@@ -13,7 +13,7 @@ const v1Router = express.Router();
 
 v1Router.get("/health", async (req, res) => {
   await prisma.$executeRaw`SELECT 1;`;
-  res.status(StatusCodes.OK).json({ message: "OK" });
+  return successResponse(res, null, "OK");
 });
 
 v1Router.post("/register", validate(register), registerController);
@@ -24,9 +24,7 @@ v1Router.post("/refresh", validate(refresh), refreshController);
 
 v1Router.get("/me", auth(), async (req, res) => {
   delete req.user.password_hash;
-  res
-    .status(StatusCodes.OK)
-    .json({ data: { user: req.user, session: req.session } });
+  return successResponse(res, { user: req.user, session: req.session });
 });
 
 export default v1Router;

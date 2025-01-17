@@ -1,11 +1,11 @@
 import bcrypt from "bcryptjs";
-import { StatusCodes } from "http-status-codes";
 import jwt from "jsonwebtoken";
 import moment from "moment";
 import {
+  successResponse,
   tokenTypes,
-  ValidationError,
   UnauthorizedError,
+  ValidationError,
 } from "../constants.js";
 import prisma from "../database.js";
 import { catchAsync } from "../utils.js";
@@ -38,11 +38,7 @@ export const register = catchAsync(async (req, res, next) => {
     },
   });
 
-  return res.status(StatusCodes.CREATED).json({
-    data: user,
-    accessToken,
-    refreshToken,
-  });
+  return successResponse(res, { user, accessToken, refreshToken });
 });
 
 export const login = catchAsync(async (req, res, next) => {
@@ -72,9 +68,7 @@ export const login = catchAsync(async (req, res, next) => {
     },
   });
 
-  return res
-    .status(StatusCodes.OK)
-    .json({ data: user, accessToken, refreshToken });
+  return successResponse(res, { user, accessToken, refreshToken });
 });
 
 export const refresh = catchAsync(async (req, res, next) => {
@@ -118,7 +112,7 @@ export const refresh = catchAsync(async (req, res, next) => {
     },
   });
 
-  return res.status(StatusCodes.OK).json({ accessToken, refreshToken });
+  return successResponse(res, { accessToken, refreshToken });
 });
 
 const generateToken = (user) => {
