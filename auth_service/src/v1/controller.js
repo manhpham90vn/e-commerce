@@ -24,7 +24,9 @@ export const register = catchAsync(async (req, res, next) => {
     throw new ConflictError("Email already exists");
   }
 
-  const user = await createUser(email, password);
+  const password_hash = await bcrypt.hash(password, 10);
+  const user = await createUser(email, password_hash);
+  delete user.password_hash;
 
   const { accessToken, refreshToken } = generateToken(user.id);
 
@@ -52,6 +54,7 @@ export const login = catchAsync(async (req, res, next) => {
     throw new UnauthorizedError("Invalid email or password");
   }
 
+  delete user.password_hash;
   const { accessToken, refreshToken } = generateToken(user.id);
 
   await createSession(

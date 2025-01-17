@@ -1,10 +1,10 @@
 import prisma from "../configs/database.js";
 
-const createUser = async (email, password) => {
+const createUser = async (email, password_hash) => {
   return await prisma.user.create({
     data: {
       email,
-      password_hash: password,
+      password_hash,
     },
   });
 };
