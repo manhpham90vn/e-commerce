@@ -24,8 +24,10 @@ services:
       - mysql-db:/var/lib/mysql
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      timeout: 10s
+      interval: 30s
+      timeout: 30s
       retries: 10
+      start_period: 30s
 
   auth_service:
     build:
@@ -41,8 +43,10 @@ services:
           "-f",
           "http://localhost:3000/api/auth_service/v1/health",
         ]
-      timeout: 10s
+      interval: 30s
+      timeout: 30s
       retries: 10
+      start_period: 30s
     depends_on:
       auth_service_database:
         condition: service_healthy
@@ -61,8 +65,10 @@ services:
       - postgres-db:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD", "pg_isready", "-d", "user_service"]
-      timeout: 10s
+      interval: 30s
+      timeout: 30s
       retries: 10
+      start_period: 30s
 
   user_service:
     build:
@@ -78,8 +84,10 @@ services:
           "-f",
           "http://localhost:8000/api/user_service/v1/health",
         ]
-      timeout: 10s
+      interval: 30s
+      timeout: 30s
       retries: 10
+      start_period: 30s
     depends_on:
       user_service_database:
         condition: service_healthy
