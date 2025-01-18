@@ -10,15 +10,49 @@ services:
       - "3306:3306"
     volumes:
       - mysql-db:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 30s
+      retries: 10
+
+  auth_service:
+    build:
+      context: auth_service
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      auth_service_database:
+        condition: service_healthy
+    volumes:
+      - ./auth_service:/app
 
   user_service_database:
     image: postgres:17
     environment:
       POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: user_service
     ports:
       - "5432:5432"
     volumes:
       - postgres-db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-d", "user_service"]
+      timeout: 30s
+      retries: 10
+
+  user_service:
+    build:
+      context: user_service
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    depends_on:
+      user_service_database:
+        condition: service_healthy
+    volumes:
+      - ./user_service:/app
 
 volumes:
   mysql-db:
