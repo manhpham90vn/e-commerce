@@ -13,7 +13,7 @@ class ProfileController extends Controller
         $user_data = $this->verifyToken();
 
         // validate request
-        $request->validate([
+        $validatedData = $request->validate([
             'first_name' => 'nullable|string|max:255',
             'last_name' => 'nullable|string|max:255',
             'phone' => 'nullable|string|max:20',
@@ -21,20 +21,14 @@ class ProfileController extends Controller
             'avatar' => 'nullable|string|max:255',
         ]);
 
-        // build data
-        $data = $request->all();
-        $data['user_id'] = $user_data['data']['id'];
+        $validatedData['user_id'] = $user_data['data']['id'];
 
-        // check if profile exists
-        $existingProfile = Profile::where('user_id', $user_data['data']['id'])->first();
+        $profile = Profile::updateOrCreate(
+            ['user_id' => $user_data['data']['id']],
+            $validatedData
+        );
 
-        if ($existingProfile) {
-            $existingProfile->update($data);
-            return response()->json($existingProfile, 200);
-        } else {
-            $profile = Profile::create($data);
-            return response()->json($profile, 200);
-        }
+        return response()->json($profile, 200);
     }
 
     public function show($id)
@@ -50,7 +44,7 @@ class ProfileController extends Controller
             $authServiceUrl = env('AUTH_SERVICE_URL');
 
             $token = request()->bearerToken();
-            $response = $client->request('GET', $authServiceUrl . '/v1/verify-token/', [
+            $response = $client->request('GET', $authServiceUrl . '/api/auth_service/v1/verify-token', [
                 'headers' => [
                     'Authorization' => 'Bearer ' . $token,
                 ]

@@ -1,6 +1,6 @@
 FROM php:8.2-alpine
 
-RUN apk add --no-cache postgresql-dev
+RUN apk add --no-cache postgresql-dev supervisor
 
 RUN docker-php-ext-install pdo pdo_pgsql
 

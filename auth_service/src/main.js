@@ -13,7 +13,7 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(passport.initialize());
 passport.use("jwt", jwtStrategy);
-app.use("/v1", v1Router);
+app.use("/api/auth_service/v1", v1Router);
 app.use(errorHandler);
 
 const port = process.env.PORT || 3000;

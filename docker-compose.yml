@@ -12,8 +12,8 @@ services:
       - mysql-db:/var/lib/mysql
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      timeout: 30s
-      retries: 10
+      timeout: 5s
+      retries: 5
 
   auth_service:
     build:
@@ -39,8 +39,8 @@ services:
       - postgres-db:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD", "pg_isready", "-d", "user_service"]
-      timeout: 30s
-      retries: 10
+      timeout: 5s
+      retries: 5
 
   user_service:
     build:
