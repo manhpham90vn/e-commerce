@@ -4,11 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\Profile;
 use App\Http\Requests\StoreOrUpdateProfileRequest;
+use App\Services\ProfileService;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class ProfileController extends Controller
 {
+
+    public function __construct(protected ProfileService $profileService) {}
+
     public function storeOrUpdate(StoreOrUpdateProfileRequest $request)
     {
         $data = $request->only([
@@ -22,24 +26,29 @@ class ProfileController extends Controller
 
         $data['user_id'] = $user_id;
 
-        $profile = Profile::updateOrCreate(
-            ['user_id' => $user_id],
-            $data
-        )->fresh();
+        $profile = $this->profileService->storeOrUpdate($data);
 
         return $this->successResponse($profile);
     }
 
-    public function showMe(Request $request)
+    public function me(Request $request)
     {
         $user_id = $request['user_data']['id'];
-        $profile = Profile::where('user_id', $user_id)->first();
+        $profile = $this->profileService->me($user_id);
+
+        if (!$profile) {
+            return $this->errorResponse(Response::HTTP_NOT_FOUND, 'Profile not found');
+        }
         return $this->successResponse($profile);
     }
 
     public function show(int $id)
     {
-        $profile = Profile::findOrFail($id);
+        $profile = $this->profileService->show($id);
+
+        if (!$profile) {
+            return $this->errorResponse(Response::HTTP_NOT_FOUND, 'Profile not found');
+        }
         return $this->successResponse($profile);
     }
 }

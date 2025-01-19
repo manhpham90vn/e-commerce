@@ -21,6 +21,6 @@ Route::prefix('user_service/v1')->group(function () {
 
     Route::middleware(['verify-token'])->group(function () {
         Route::post('/profiles', [ProfileController::class, 'storeOrUpdate']);
-        Route::get('/profiles', [ProfileController::class, 'showMe']);
+        Route::get('/profiles', [ProfileController::class, 'me']);
     });
 });
