@@ -5,11 +5,11 @@ import auth from "../middleware/auth.js";
 import validate from "../middleware/validate.js";
 import {
   login as loginController,
-  refresh as refreshController,
-  register as registerController,
   logOut as logOutController,
   me as meController,
-  verifyToken as verifyTokenController,
+  refresh as refreshController,
+  register as registerController,
+  verify as verifyTokenController,
 } from "./controller.js";
 import { login, refresh, register } from "./validation.js";
 

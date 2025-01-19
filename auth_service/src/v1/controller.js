@@ -1,15 +1,14 @@
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
 import ConflictError from "../common/error/ConflictError.js";
 import UnauthorizedError from "../common/error/UnauthorizedError.js";
 import successResponse from "../common/successResponse.js";
 import { tokenTypes } from "../configs/constants.js";
+import { comparePassword, hashPassword } from "../repository/hashRepository.js";
 import {
   createSession,
   findSessionByConditions,
   updateSession,
 } from "../repository/sessionRepository.js";
-import { generateToken } from "../repository/tokenRepository.js";
+import { generateToken, verifyToken } from "../repository/tokenRepository.js";
 import {
   createUser,
   findUserByConditions,
@@ -24,7 +23,7 @@ const register = catchAsync(async (req, res, next) => {
     throw new ConflictError("Email already exists");
   }
 
-  const password_hash = await bcrypt.hash(password, 10);
+  const password_hash = await hashPassword(password);
   const user = await createUser(email, password_hash);
   delete user.password_hash;
 
@@ -49,7 +48,7 @@ const login = catchAsync(async (req, res, next) => {
     throw new UnauthorizedError("Invalid email or password");
   }
 
-  const isPasswordMatch = await bcrypt.compare(password, user.password_hash);
+  const isPasswordMatch = await comparePassword(password, user.password_hash);
   if (!isPasswordMatch) {
     throw new UnauthorizedError("Invalid email or password");
   }
@@ -70,7 +69,7 @@ const login = catchAsync(async (req, res, next) => {
 
 const refresh = catchAsync(async (req, res, next) => {
   const { token } = req.body;
-  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  const decoded = verifyToken(token);
 
   if (decoded.type !== tokenTypes.REFRESH_TOKEN) {
     throw new UnauthorizedError("Invalid token type");
@@ -115,9 +114,9 @@ const logOut = catchAsync(async (req, res, next) => {
   return successResponse(res, null, "Logout success");
 });
 
-const verifyToken = catchAsync(async (req, res, next) => {
+const verify = catchAsync(async (req, res, next) => {
   const token = req.headers.authorization.split(" ")[1];
-  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  const decoded = verifyToken(token);
 
   if (decoded.type !== tokenTypes.ACCESS_TOKEN) {
     throw new UnauthorizedError("Invalid token type");
@@ -147,4 +146,4 @@ const me = catchAsync(async (req, res, next) => {
   return successResponse(res, { user: req.user, session: req.session });
 });
 
-export { register, login, refresh, logOut, verifyToken, me };
+export { login, logOut, me, refresh, register, verify };
