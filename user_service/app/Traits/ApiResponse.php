@@ -20,8 +20,8 @@ trait ApiResponse
     {
         $response = [
             'status' => $statusCode,
-            'message' => $message,
             'data' => $data,
+            'message' => $message,
         ];
 
         if ($errors !== null) {
