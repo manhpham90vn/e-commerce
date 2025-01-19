@@ -22,19 +22,19 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->render(function (ValidationException $e, Request $request) {
             if ($request->is('api/*')) {
-                return ApiResponseHelper::error(Response::HTTP_UNPROCESSABLE_ENTITY, 'Validation error', $e->getMessage());
+                return ApiResponseHelper::error(Response::HTTP_UNPROCESSABLE_ENTITY, 'Validation error', null);
             }
         });
 
         $exceptions->render(function (NotFoundHttpException $e, Request $request) {
             if ($request->is('api/*')) {
-                return ApiResponseHelper::error(Response::HTTP_NOT_FOUND, 'Not found', $e->getMessage());
+                return ApiResponseHelper::error(Response::HTTP_NOT_FOUND, 'Not found', null);
             }
         });
 
         $exceptions->render(function (\Exception $e, Request $request) {
             if ($request->is('api/*')) {
-                return ApiResponseHelper::error(Response::HTTP_INTERNAL_SERVER_ERROR, 'Server error', $e->getMessage());
+                return ApiResponseHelper::error(Response::HTTP_INTERNAL_SERVER_ERROR, 'Server error', null);
             }
         });
     })->create();

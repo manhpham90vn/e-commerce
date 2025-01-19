@@ -22,7 +22,7 @@ class VerifyToken
             $token = $request->bearerToken();
 
             if (!$token) {
-                return $this->errorResponse(Response::HTTP_UNAUTHORIZED, 'Unauthorized', null);
+                return $this->errorResponse(Response::HTTP_UNAUTHORIZED, 'Unauthorized');
             }
 
             $response = $client->get($authServiceUrl . '/api/auth_service/v1/verify-token', [
@@ -39,14 +39,14 @@ class VerifyToken
                 return $next($request);
             }
 
-            return $this->errorResponse(Response::HTTP_UNAUTHORIZED, 'Unauthorized', null);
+            return $this->errorResponse(Response::HTTP_UNAUTHORIZED, 'Unauthorized');
         } catch (\GuzzleHttp\Exception\GuzzleException $e) {
             if ($e->getCode() === Response::HTTP_UNAUTHORIZED) {
-                return $this->errorResponse(Response::HTTP_UNAUTHORIZED, 'Unauthorized', null);
+                return $this->errorResponse(Response::HTTP_UNAUTHORIZED, 'Unauthorized');
             }
-            return $this->errorResponse(Response::HTTP_SERVICE_UNAVAILABLE, 'Auth service unavailable', null);
+            return $this->errorResponse(Response::HTTP_SERVICE_UNAVAILABLE, 'Auth service unavailable');
         } catch (\Exception $e) {
-            return $this->errorResponse(Response::HTTP_UNAUTHORIZED, 'Auth service unavailable', null);
+            return $this->errorResponse(Response::HTTP_UNAUTHORIZED, 'Auth service unavailable');
         }
     }
 }

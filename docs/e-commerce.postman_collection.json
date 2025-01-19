@@ -79,7 +79,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE3MzcyMjUzMTcsImV4cCI6MTczNzIyODkxNywidHlwZSI6IlJFRlJFU0hfVE9LRU4ifQ.lhTJSjO2FMMZtvWXC_vGzqGrobe9X5zct_tSrPl5hCo\"\n}",
+							"raw": "{\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE3MzcyMjcwOTUsImV4cCI6MTczNzIzMDY5NSwidHlwZSI6IlJFRlJFU0hfVE9LRU4ifQ.hTwx9yRiGs07tImXtqdeuC9GQ_iYRwTZnXO8key5Joo\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -110,7 +110,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE3MzcyMjUzMzEsImV4cCI6MTczNzIyODkzMSwidHlwZSI6IkFDQ0VTU19UT0tFTiJ9.5b_ZU8EUFvVa35EsIOR0lKCGoDWn4stezpihpxQI8p8",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE3MzcyMjcxMTQsImV4cCI6MTczNzIzMDcxNCwidHlwZSI6IkFDQ0VTU19UT0tFTiJ9.ZqMjU2L7hUJZ40lvEq0DwbmKc10DDmyf9m_4MMH7FDI",
 									"type": "string"
 								}
 							]
@@ -144,7 +144,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE3MzcyMjI3MTQsImV4cCI6MTczNzIyNjMxNCwidHlwZSI6IkFDQ0VTU19UT0tFTiJ9.cm8jrKOh-BkqTQnka8DSIvsPDxU51hgqMh-6zBIY3So",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE3MzcyMjcwOTksImV4cCI6MTczNzIzMDY5OSwidHlwZSI6IkFDQ0VTU19UT0tFTiJ9.FuriY81U6ieoT9eLVek-NxGhnPxFuTCSSiUEG78n9JU",
 									"type": "string"
 								}
 							]
@@ -187,7 +187,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE3MzcyMjI3MTQsImV4cCI6MTczNzIyNjMxNCwidHlwZSI6IkFDQ0VTU19UT0tFTiJ9.cm8jrKOh-BkqTQnka8DSIvsPDxU51hgqMh-6zBIY3So",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE3MzcyNjU3MzMsImV4cCI6MTczNzI2OTMzMywidHlwZSI6IkFDQ0VTU19UT0tFTiJ9.vjdnZp97Kovc27MUkmkICGlR5io_onXgcVx3vX9Uw9c1",
 									"type": "string"
 								}
 							]
@@ -256,13 +256,19 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE3MzcyMjI3MTQsImV4cCI6MTczNzIyNjMxNCwidHlwZSI6IkFDQ0VTU19UT0tFTiJ9.cm8jrKOh-BkqTQnka8DSIvsPDxU51hgqMh-6zBIY3So",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE3MzcyNjk3ODIsImV4cCI6MTczNzI3MzM4MiwidHlwZSI6IkFDQ0VTU19UT0tFTiJ9._VVHwZhsZtaHm1rHd_9uBntar6hgDNCk5D0Vik1Tv0o",
 									"type": "string"
 								}
 							]
 						},
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n    \"first_name\": \"Manh\",\n    \"last_name\": \"Pham\",\n    \"phone\": \"0972004788\",\n    \"address\": \"hn\"\n}",
@@ -272,6 +278,43 @@
 								}
 							}
 						},
+						"url": {
+							"raw": "http://localhost/api/user_service/v1/profiles",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"user_service",
+								"v1",
+								"profiles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "me",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE3MzcyNjk3ODIsImV4cCI6MTczNzI3MzM4MiwidHlwZSI6IkFDQ0VTU19UT0tFTiJ9._VVHwZhsZtaHm1rHd_9uBntar6hgDNCk5D0Vik1Tv0o1",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
 						"url": {
 							"raw": "http://localhost/api/user_service/v1/profiles",
 							"protocol": "http",
@@ -299,13 +342,19 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE3MzcyMjUyNTEsImV4cCI6MTczNzIyODg1MSwidHlwZSI6IkFDQ0VTU19UT0tFTiJ9.JIy6RKSJuP_hgLGiSPkMGy8s09fm5-h4BPq6sPVEHxY",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE3MzcyMjcwOTksImV4cCI6MTczNzIzMDY5OSwidHlwZSI6IkFDQ0VTU19UT0tFTiJ9.FuriY81U6ieoT9eLVek-NxGhnPxFuTCSSiUEG78n9JU",
 									"type": "string"
 								}
 							]
 						},
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n    \"first_name\": \"Manh\",\n    \"last_name\": \"Pham\",\n    \"phone\": \"0972004788\",\n    \"address\": \"hn\"\n}",
@@ -316,7 +365,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost/api/user_service/v1/profiles/1",
+							"raw": "http://localhost/api/user_service/v1/profiles/100",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -326,7 +375,7 @@
 								"user_service",
 								"v1",
 								"profiles",
-								"1"
+								"100"
 							]
 						}
 					},
@@ -339,7 +388,13 @@
 							"type": "noauth"
 						},
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
 						"url": {
 							"raw": "http://localhost/api/user_service/v1/health",
 							"protocol": "http",
