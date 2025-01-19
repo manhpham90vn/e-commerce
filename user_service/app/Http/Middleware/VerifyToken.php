@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\JsonResponse;
 use App\Traits\ApiResponse;
 
@@ -40,7 +41,7 @@ class VerifyToken
             }
 
             return $this->errorResponse(Response::HTTP_UNAUTHORIZED, 'Unauthorized');
-        } catch (\GuzzleHttp\Exception\GuzzleException $e) {
+        } catch (GuzzleException $e) {
             if ($e->getCode() === Response::HTTP_UNAUTHORIZED) {
                 return $this->errorResponse(Response::HTTP_UNAUTHORIZED, 'Unauthorized');
             }

@@ -14,7 +14,7 @@ class ProfileController extends Controller
         $data = $request->only([
             'first_name',
             'last_name',
-            'phone_number',
+            'phone',
             'address',
             'avatar'
         ]);
@@ -25,7 +25,7 @@ class ProfileController extends Controller
         $profile = Profile::updateOrCreate(
             ['user_id' => $user_id],
             $data
-        );
+        )->fresh();
 
         return $this->successResponse($profile);
     }
@@ -39,10 +39,7 @@ class ProfileController extends Controller
 
     public function show(int $id)
     {
-        $profile = Profile::find($id);
-        if (!$profile) {
-            return $this->errorResponse(Response::HTTP_NOT_FOUND, 'Profile not found');
-        }
+        $profile = Profile::findOrFail($id);
         return $this->successResponse($profile);
     }
 }

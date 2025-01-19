@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
+use App\Exceptions\ServerError;
 
 Route::prefix('user_service/v1')->group(function () {
     Route::get('/health', function () {
@@ -12,7 +13,7 @@ Route::prefix('user_service/v1')->group(function () {
             DB::select('SELECT 1');
             return ApiResponseHelper::success(null, 'OK');
         } catch (\Exception $e) {
-            return ApiResponseHelper::error(Response::HTTP_INTERNAL_SERVER_ERROR, 'Errors', $e->getMessage());
+            throw new ServerError($e->getMessage());
         }
     });
 
