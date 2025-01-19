@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Profile;
 use App\Http\Requests\StoreOrUpdateProfileRequest;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class ProfileController extends Controller
 {
@@ -28,9 +30,19 @@ class ProfileController extends Controller
         return $this->successResponse($profile);
     }
 
-    public function show($id)
+    public function showMe(Request $request)
     {
-        $profile = Profile::findOrFail($id);
+        $user_id = $request['user_data']['id'];
+        $profile = Profile::where('user_id', $user_id)->first();
+        return $this->successResponse($profile);
+    }
+
+    public function show(int $id)
+    {
+        $profile = Profile::find($id);
+        if (!$profile) {
+            return $this->errorResponse(Response::HTTP_NOT_FOUND, 'Profile not found');
+        }
         return $this->successResponse($profile);
     }
 }
