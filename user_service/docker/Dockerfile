@@ -14,4 +14,4 @@ RUN composer install --no-autoloader
 
 EXPOSE 8000
 
-ENTRYPOINT [ "sh", "/app/entrypoint.sh" ]
+ENTRYPOINT [ "sh", "/app/docker/entrypoint.sh" ]
