@@ -13,7 +13,7 @@ trait ApiResponse
 
     protected function errorResponse($statusCode = Response::HTTP_NOT_FOUND, $message = null, $errors = null)
     {
-        return $this->apiResponse($statusCode, $message, null, $errors);
+        return $this->apiResponse($statusCode, null, $message, $errors);
     }
 
     protected function apiResponse($statusCode = Response::HTTP_OK, $data = null, $message = null, $errors = null)
