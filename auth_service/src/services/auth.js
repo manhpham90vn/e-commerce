@@ -110,6 +110,8 @@ const verify = async (token) => {
   if (!session) {
     throw new UnauthorizedError("Invalid session");
   }
+
+  return { user };
 };
 
 export { login, logout, refresh, register, verify };

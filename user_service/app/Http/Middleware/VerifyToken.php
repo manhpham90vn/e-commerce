@@ -9,6 +9,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\JsonResponse;
 use App\Traits\ApiResponse;
+use Illuminate\Support\Facades\Log;
 
 class VerifyToken
 {
@@ -35,7 +36,9 @@ class VerifyToken
             if ($response->getStatusCode() === Response::HTTP_OK) {
                 $responseData = json_decode($response->getBody(), true);
 
-                $request->merge(['user_data' => $responseData['data']]);
+                Log::info('Verify success user_id ' . $responseData['data']['user']['id'] . ' Url: ' . $request->host() . '/' . $request->path());
+
+                $request->merge(['user_data' => $responseData['data']['user']]);
 
                 return $next($request);
             }
