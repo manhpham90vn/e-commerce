@@ -1,6 +1,8 @@
+import compression from "compression";
 import cors from "cors";
 import "dotenv/config";
 import express from "express";
+import helmet from "helmet";
 import passport from "passport";
 import corsOptions from "./configs/corsOptions.js";
 import jwtStrategy from "./configs/jwt.js";
@@ -9,15 +11,30 @@ import v1Router from "./v1/route.js";
 
 const app = express();
 
-app.use(cors(corsOptions));
+// Security
+app.use(helmet());
+
+// Body parser
 app.use(express.json());
+
+// Compress responses
+app.use(compression());
+
+// CORS
+app.use(cors(corsOptions));
+
+// Passport middleware
 app.use(passport.initialize());
 passport.use("jwt", jwtStrategy);
+
+// Routes
 app.use("/api/auth_service/v1", v1Router);
+
+// Error handler middleware
 app.use(errorHandler);
 
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-  console.log("Environment:", process.env.NODE_ENV);
-  console.log(`Server is running on http://localhost:${port}`);
+app.listen(process.env.PORT, () => {
+  console.log(
+    `Server is running on http://localhost:${process.env.PORT} with env ${process.env.NODE_ENV}`
+  );
 });

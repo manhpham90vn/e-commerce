@@ -14,8 +14,6 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: toor
       MYSQL_DATABASE: auth_service
-      MYSQL_USER: admin
-      MYSQL_PASSWORD: admin
     ports:
       - "3306:3306"
     volumes:
