@@ -8,10 +8,4 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 
 WORKDIR /app
 
-COPY composer.* ./
-
-RUN composer install --no-autoloader
-
-EXPOSE 8000
-
 ENTRYPOINT [ "sh", "/app/docker/entrypoint.sh" ]

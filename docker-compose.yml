@@ -48,6 +48,7 @@ services:
         condition: service_healthy
     volumes:
       - ./auth_service:/app
+      - /app/node_modules
 
   user_service_database:
     image: postgres:17
@@ -89,6 +90,7 @@ services:
         condition: service_healthy
     volumes:
       - ./user_service:/app
+      - /app/vendor
 
 volumes:
   mysql-db:

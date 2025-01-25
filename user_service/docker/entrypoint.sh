@@ -1,7 +1,8 @@
 #!/bin/sh
 
-php artisan key:generate
+composer install
 
+php artisan key:generate
 php artisan migrate
 php artisan config:clear
 
