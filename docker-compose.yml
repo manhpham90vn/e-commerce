@@ -92,6 +92,49 @@ services:
       - ./user_service:/app
       - /app/vendor
 
+  shop_service_database:
+    image: mongo:5.0
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: toor
+      MONGO_INITDB_DATABASE: shop_service
+    ports:
+      - "27017:27017"
+    healthcheck:
+      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
+      interval: 30s
+      timeout: 30s
+      retries: 10
+      start_period: 30s
+    volumes:
+      - mongodb-db:/data/db
+      - ./shop_service/docker/init-db.sh:/docker-entrypoint-initdb.d/init-db.sh:ro
+
+  shop_service:
+    build:
+      context: shop_service
+      dockerfile: docker/Dockerfile
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "curl",
+          "-f",
+          "http://localhost:8080/api/shop_service/v1/health",
+        ]
+      interval: 30s
+      timeout: 30s
+      retries: 10
+      start_period: 30s
+    depends_on:
+      shop_service_database:
+        condition: service_healthy
+    volumes:
+      - ./shop_service:/app
+
 volumes:
   mysql-db:
   postgres-db:
+  mongodb-db:
