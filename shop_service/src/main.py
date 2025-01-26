@@ -1,14 +1,21 @@
 from fastapi import FastAPI, Body, HTTPException
 import motor.motor_asyncio
 from .model.shop import ShopProfile
-from bson import ObjectId
 from dotenv import load_dotenv
 import os
 
-app = FastAPI()
+# Load environment variables
 load_dotenv()
-client = motor.motor_asyncio.AsyncIOMotorClient(os.environ["MONGODB_URL"])
-db = client.shop_service
+
+# Create FastAPI app
+app = FastAPI()
+
+# Connect to MongoDB
+MONGODB_URL = os.getenv("MONGODB_URL")
+DB_NAME = os.getenv("DB_NAME")
+
+client = motor.motor_asyncio.AsyncIOMotorClient(MONGODB_URL)
+db = client[DB_NAME]
 shop_collection = db.get_collection("shops")
 
 
@@ -25,8 +32,8 @@ async def health_check():
 @app.post("/shops")
 async def create_shop(request: ShopProfile = Body(...)):
     data = request.model_dump(by_alias=True, exclude=["id"])
-    shop = await shop_collection.insert_one(data)
-    created_student = await shop_collection.find_one(
-        {"_id": shop.inserted_id}
+    inserted_shop = await shop_collection.insert_one(data)
+    shop = await shop_collection.find_one(
+        {"_id": inserted_shop.inserted_id}
     )
-    return ShopProfile(**created_student)
+    return ShopProfile(**shop)
