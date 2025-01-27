@@ -13,6 +13,7 @@ dependencies = [
     "motor (>=3.6.1,<4.0.0)",
     "pydantic[email] (>=2.10.6,<3.0.0)",
     "python-dotenv (>=1.0.1,<2.0.0)",
+    "dependency-injector (>=4.45.0,<5.0.0)",
 ]
 
 

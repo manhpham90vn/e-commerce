@@ -256,7 +256,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE3MzcyNjk3ODIsImV4cCI6MTczNzI3MzM4MiwidHlwZSI6IkFDQ0VTU19UT0tFTiJ9._VVHwZhsZtaHm1rHd_9uBntar6hgDNCk5D0Vik1Tv0o",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE3Mzc4MjI2NjYsImV4cCI6MTczNzgyNjI2NiwidHlwZSI6IkFDQ0VTU19UT0tFTiJ9.RZ31K22mp89nXC16ICsMRdHUrlWn3NUGTk1eWwBF0bo",
 									"type": "string"
 								}
 							]
@@ -271,7 +271,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"first_name\": \"Manh\",\n    \"last_name\": \"Pham\",\n    \"phone\": \"0972004788\",\n    \"address\": \"hn\"\n}",
+							"raw": "{\n    \"first_name\": \"Manh\",\n    \"last_name\": \"Pham\",\n    \"phone\": \"0972004788\",\n    \"address\": \"HN\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -302,7 +302,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE3MzcyNjk3ODIsImV4cCI6MTczNzI3MzM4MiwidHlwZSI6IkFDQ0VTU19UT0tFTiJ9._VVHwZhsZtaHm1rHd_9uBntar6hgDNCk5D0Vik1Tv0o1",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE3Mzc4MjI2NjYsImV4cCI6MTczNzgyNjI2NiwidHlwZSI6IkFDQ0VTU19UT0tFTiJ9.RZ31K22mp89nXC16ICsMRdHUrlWn3NUGTk1eWwBF0bo",
 									"type": "string"
 								}
 							]
@@ -316,7 +316,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost/api/user_service/v1/profiles",
+							"raw": "http://localhost/api/user_service/v1/me",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -325,7 +325,7 @@
 								"api",
 								"user_service",
 								"v1",
-								"profiles"
+								"me"
 							]
 						}
 					},
@@ -342,7 +342,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE3MzcyMjcwOTksImV4cCI6MTczNzIzMDY5OSwidHlwZSI6IkFDQ0VTU19UT0tFTiJ9.FuriY81U6ieoT9eLVek-NxGhnPxFuTCSSiUEG78n9JU",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE3Mzc4MjI2NjYsImV4cCI6MTczNzgyNjI2NiwidHlwZSI6IkFDQ0VTU19UT0tFTiJ9.RZ31K22mp89nXC16ICsMRdHUrlWn3NUGTk1eWwBF0bo",
 									"type": "string"
 								}
 							]
@@ -365,7 +365,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost/api/user_service/v1/profiles/100",
+							"raw": "http://localhost/api/user_service/v1/profiles/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -375,7 +375,7 @@
 								"user_service",
 								"v1",
 								"profiles",
-								"100"
+								"1"
 							]
 						}
 					},
@@ -406,6 +406,62 @@
 								"user_service",
 								"v1",
 								"health"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "shop_service",
+			"item": [
+				{
+					"name": "health",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/api/shop_service/v1/health",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"shop_service",
+								"v1",
+								"health"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create shop",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"contact\": \"test@test.com\",\n  \"description\": \"This is a shop\",\n  \"location\": \"123, Main Street\",\n  \"name\": \"My Shop\",\n  \"user_id\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/api/shop_service/v1/shops",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"shop_service",
+								"v1",
+								"shops"
 							]
 						}
 					},
