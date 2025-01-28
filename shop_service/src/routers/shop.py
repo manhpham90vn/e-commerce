@@ -3,7 +3,8 @@ from fastapi import Body, HTTPException
 from src.models.shop import ShopProfile
 from dependency_injector.wiring import Provide, inject
 from src.containers import Container
-from motor.motor_asyncio import AsyncIOMotorCollection, AsyncIOMotorClient
+from motor.motor_asyncio import AsyncIOMotorClient
+from src.service.shop import ShopServiceInterface
 
 route = APIRouter(prefix="/api/shop_service/v1", tags=["Shops"])
 
@@ -21,10 +22,5 @@ async def health_check(db_instance: AsyncIOMotorClient = Depends(Provide[Contain
 
 @route.post("/shops")
 @inject
-async def create_shop(request: ShopProfile = Body(...), shop_collection: AsyncIOMotorCollection = Depends(Provide[Container.shop_collection])):
-    data = request.model_dump(by_alias=True, exclude=["id"])
-    inserted_shop = await shop_collection.insert_one(data)
-    shop = await shop_collection.find_one(
-        {"_id": inserted_shop.inserted_id}
-    )
-    return ShopProfile(**shop)
+async def create_shop(request: ShopProfile = Body(...), shop_service: ShopServiceInterface = Depends(Provide[Container.shop_service])):
+    return await shop_service.create_shop(request)
