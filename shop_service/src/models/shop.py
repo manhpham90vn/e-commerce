@@ -9,7 +9,6 @@ PyObjectId = Annotated[str, BeforeValidator(str)]
 
 class ShopProfile(BaseModel):
     id: Optional[PyObjectId] = Field(alias="_id", default=None)
-    user_id: int = Field(..., description="User ID managing the shop")
     name: str = Field(..., max_length=100, description="Shop name")
     description: Optional[str] = Field(
         None, max_length=500, description="Shop description")
@@ -27,7 +26,6 @@ class ShopProfile(BaseModel):
         arbitrary_types_allowed=True,
         json_schema_extra={
             "example": {
-                "user_id": 1,
                 "name": "My Shop",
                 "description": "This is a shop",
                 "location": "123, Main Street",

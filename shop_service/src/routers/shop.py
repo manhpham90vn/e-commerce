@@ -5,6 +5,7 @@ from dependency_injector.wiring import Provide, inject
 from src.containers import Container
 from motor.motor_asyncio import AsyncIOMotorClient
 from src.service.shop import ShopServiceInterface
+from src.middleware.auth import verify_token
 
 route = APIRouter(prefix="/api/shop_service/v1", tags=["Shops"])
 
@@ -22,5 +23,9 @@ async def health_check(db_instance: AsyncIOMotorClient = Depends(Provide[Contain
 
 @route.post("/shops")
 @inject
-async def create_shop(request: ShopProfile = Body(...), shop_service: ShopServiceInterface = Depends(Provide[Container.shop_service])):
-    return await shop_service.create_shop(request)
+async def create_shop(request: ShopProfile = Body(...),
+                      user_data: dict = Depends(verify_token),
+                      shop_service: ShopServiceInterface = Depends(
+                          Provide[Container.shop_service]),
+                      ):
+    return await shop_service.create_shop(request, user_data)
