@@ -9,7 +9,11 @@ PyObjectId = Annotated[str, BeforeValidator(str)]
 
 
 class ShopResponse(BaseModel):
-    id: Optional[PyObjectId] = Field(alias="_id", default=None)
+    id: Optional[PyObjectId] = Field(
+        default=None,
+        validation_alias="_id",
+        serialization_alias="id"
+    )
     name: str
     user_id: int
     description: Optional[str]
@@ -20,6 +24,7 @@ class ShopResponse(BaseModel):
     deleted_at: Optional[datetime]
 
     model_config = ConfigDict(
+        allow_population_by_field_name=True,
         populate_by_name=True,
         arbitrary_types_allowed=True,
     )

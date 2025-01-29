@@ -16,7 +16,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\": \"test@test.com\",\n    \"password\": \"12345678\"\n}",
+							"raw": "{\n    \"email\": \"test3@test.com\",\n    \"password\": \"12345678\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -46,7 +46,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\": \"test@test.com\",\n    \"password\": \"12345678\"\n}",
+							"raw": "{\n    \"email\": \"test3@test.com\",\n    \"password\": \"12345678\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -440,11 +440,21 @@
 				{
 					"name": "create shop",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo0LCJpYXQiOjE3MzgxNDA1MTIsImV4cCI6MTczODE0NDExMiwidHlwZSI6IkFDQ0VTU19UT0tFTiJ9.szpTXO4Lj1FAS3tYw4vUY_Cq5IMBbgUxTLVTO-OZGP0",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"contact\": \"test@test.com\",\n  \"description\": \"This is a shop\",\n  \"location\": \"123, Main Street\",\n  \"name\": \"My Shop\",\n  \"user_id\": 1\n}",
+							"raw": "{\n  \"contact\": \"test@test.com\",\n  \"description\": \"This is a shop\",\n  \"location\": \"123, Main Street\",\n  \"name\": \"My Shop\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
