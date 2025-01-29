@@ -1,11 +1,11 @@
+import os
+
+import httpx
 from dependency_injector import containers, providers
 from dotenv import load_dotenv
 from src.database import Database
-import os
 from src.repository.shop import ShopRepository
 from src.service.shop import ShopService
-import httpx
-
 
 load_dotenv()
 
@@ -33,15 +33,16 @@ class Container(containers.DeclarativeContainer):
             session=session(), db_name=db_name())
     )
 
-    # Repositories
     shop_collection = providers.Singleton(
         lambda db_instance=db_instance: db_instance().get_collection("shops"))
 
+    # Repositories
     shop_repository = providers.Factory(
         ShopRepository, collection=shop_collection)
 
+    # Services
     shop_service = providers.Factory(
         ShopService, repository=shop_repository)
 
     # Middleware
-    http_client = providers.Factory(httpx.AsyncClient)
+    http_client = providers.Singleton(httpx.AsyncClient)

@@ -1,11 +1,11 @@
-from fastapi import APIRouter, Depends
-from fastapi import Body, HTTPException
-from src.models.shop import ShopProfile
 from dependency_injector.wiring import Provide, inject
-from src.containers import Container
+from fastapi import APIRouter, Body, Depends, HTTPException
 from motor.motor_asyncio import AsyncIOMotorClient
-from src.service.shop import ShopServiceInterface
+from src.containers import Container
 from src.middleware.auth import verify_token
+from src.request.shop_request import ShopRequest
+from src.service.shop import ShopServiceInterface
+from src.models.shop import Shop
 
 route = APIRouter(prefix="/api/shop_service/v1", tags=["Shops"])
 
@@ -23,9 +23,13 @@ async def health_check(db_instance: AsyncIOMotorClient = Depends(Provide[Contain
 
 @route.post("/shops")
 @inject
-async def create_shop(request: ShopProfile = Body(...),
+async def create_shop(request: ShopRequest = Body(...),
                       user_data: dict = Depends(verify_token),
                       shop_service: ShopServiceInterface = Depends(
                           Provide[Container.shop_service]),
                       ):
-    return await shop_service.create_shop(request, user_data)
+    data = request.model_dump(by_alias=True)
+    data["user_id"] = user_data["id"]
+
+    shop = Shop(**data)
+    return await shop_service.create_shop(shop)
