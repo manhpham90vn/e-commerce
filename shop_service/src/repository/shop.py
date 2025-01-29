@@ -17,7 +17,7 @@ class ShopRepository(ShopRepositoryInterface):
         self.collection = collection
 
     async def create_shop(self, shop: Shop) -> ShopResponse:
-        data = shop.model_dump(by_alias=True, exclude=["id"])
+        data = shop.model_dump(by_alias=True)
         inserted_shop = await self.collection.insert_one(data)
         shop_result = await self.collection.find_one(
             {"_id": inserted_shop.inserted_id}
