@@ -4,7 +4,8 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from src.containers import Container
 from src.middleware.auth import verify_token
 from src.models.shop import Shop
-from src.request.shop_request import ShopRequest
+from src.request.create_shop import CreateShop
+from src.request.update_shop import UpdateShop
 from src.service.shop import ShopServiceInterface
 
 route = APIRouter(prefix="/api/shop_service/v1", tags=["Shops"])
@@ -23,7 +24,7 @@ async def health_check(db_instance: AsyncIOMotorClient = Depends(Provide[Contain
 
 @route.post("/shops")
 @inject
-async def create_shop(request: ShopRequest = Body(...),
+async def create_shop(request: CreateShop = Body(...),
                       user_data: dict = Depends(verify_token),
                       shop_service: ShopServiceInterface = Depends(
                           Provide[Container.shop_service]),
@@ -31,4 +32,44 @@ async def create_shop(request: ShopRequest = Body(...),
     shop_request = request.model_dump(by_alias=True)
     shop_request["user_id"] = user_data["id"]
     shop = Shop(**shop_request)
-    return await shop_service.create_shop(shop)
+
+    result = await shop_service.create_shop(shop)
+
+    if not result:
+        raise HTTPException(status_code=400, detail="Shop already exists")
+    return result
+
+
+@route.post("/shops/{shop_id}")
+@inject
+async def update_shop(shop_id: str,
+                      request: UpdateShop = Body(...),
+                      user_data: dict = Depends(verify_token),
+                      shop_service: ShopServiceInterface = Depends(
+                          Provide[Container.shop_service]),
+                      ):
+    shop_request = request.model_dump(by_alias=True)
+    shop_request["id"] = shop_id
+    shop_request["user_id"] = user_data["id"]
+    shop = Shop(**shop_request)
+
+    result = await shop_service.update(shop)
+
+    if not result:
+        raise HTTPException(
+            status_code=404, detail="Shop not found or you are not the owner")
+
+    return result
+
+
+@route.get("/shops/{shop_id}")
+@inject
+async def get_shop(shop_id: str,
+                   shop_service: ShopServiceInterface = Depends(
+                       Provide[Container.shop_service]),
+                   ):
+    result = await shop_service.get_shop(shop_id)
+
+    if not result:
+        raise HTTPException(status_code=404, detail="Shop not found")
+    return result

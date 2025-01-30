@@ -3,7 +3,7 @@ from typing import Optional
 from pydantic import BaseModel, EmailStr, Field, ConfigDict
 
 
-class ShopRequest(BaseModel):
+class CreateShop(BaseModel):
     name: str = Field(..., max_length=100, description="Shop name")
     description: Optional[str] = Field(
         None, max_length=500, description="Shop description")

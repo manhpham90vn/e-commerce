@@ -11,7 +11,7 @@ class Shop(BaseModel):
         validation_alias="_id",
         serialization_alias="id"
     )
-    name: str = Field(..., max_length=100, description="Shop name")
+    name: Optional[str] = Field(..., max_length=100, description="Shop name")
     user_id: int = Field(..., description="User id")
     description: Optional[str] = Field(
         None, max_length=500, description="Shop description")
@@ -29,3 +29,6 @@ class Shop(BaseModel):
         populate_by_name=True,
         arbitrary_types_allowed=True,
     )
+
+    def dict_without_timestamps(self, **kwargs):
+        return self.model_dump(by_alias=True, exclude=["created_at", "updated_at", "deleted_at"], **kwargs)
