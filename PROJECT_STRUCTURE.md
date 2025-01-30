@@ -12,7 +12,8 @@
 - have contants class
 - have repository layer (interact with database)
 - have service layer (interact with repository layer) only return data to reuse business logic
-- have route, controller, models, validation request params, response, schema (interact with database)
+- have route, controller, models, validation request params, response
 - have docker
 - have dependency injector (optional)
 - have health check endpoint (ping to database)
+- have migration or database schema
