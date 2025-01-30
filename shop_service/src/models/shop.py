@@ -1,10 +1,16 @@
+from datetime import datetime
 from typing import Optional
 
-from pydantic import EmailStr, Field, BaseModel, ConfigDict
-from datetime import datetime
+from pydantic import BaseModel, ConfigDict, EmailStr, Field
+from src.models.base import PyObjectId
 
 
 class Shop(BaseModel):
+    id: Optional[PyObjectId] = Field(
+        default=None,
+        validation_alias="_id",
+        serialization_alias="id"
+    )
     name: str = Field(..., max_length=100, description="Shop name")
     user_id: int = Field(..., description="User id")
     description: Optional[str] = Field(

@@ -3,9 +3,9 @@ from fastapi import APIRouter, Body, Depends, HTTPException
 from motor.motor_asyncio import AsyncIOMotorClient
 from src.containers import Container
 from src.middleware.auth import verify_token
+from src.models.shop import Shop
 from src.request.shop_request import ShopRequest
 from src.service.shop import ShopServiceInterface
-from src.models.shop import Shop
 
 route = APIRouter(prefix="/api/shop_service/v1", tags=["Shops"])
 
@@ -28,8 +28,7 @@ async def create_shop(request: ShopRequest = Body(...),
                       shop_service: ShopServiceInterface = Depends(
                           Provide[Container.shop_service]),
                       ):
-    data = request.model_dump(by_alias=True)
-    data["user_id"] = user_data["id"]
-
-    shop = Shop(**data)
+    shop_request = request.model_dump(by_alias=True)
+    shop_request["user_id"] = user_data["id"]
+    shop = Shop(**shop_request)
     return await shop_service.create_shop(shop)
