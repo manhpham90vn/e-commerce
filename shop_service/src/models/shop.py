@@ -11,7 +11,7 @@ class Shop(BaseModel):
         validation_alias="_id",
         serialization_alias="id"
     )
-    name: Optional[str] = Field(..., max_length=100, description="Shop name")
+    name: str = Field(..., max_length=100, description="Shop name")
     user_id: int = Field(..., description="User id")
     description: Optional[str] = Field(
         None, max_length=500, description="Shop description")

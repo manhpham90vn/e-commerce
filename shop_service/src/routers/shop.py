@@ -3,7 +3,6 @@ from fastapi import APIRouter, Body, Depends, HTTPException
 from motor.motor_asyncio import AsyncIOMotorClient
 from src.containers import Container
 from src.middleware.auth import verify_token
-from src.models.shop import Shop
 from src.request.create_shop import CreateShop
 from src.request.update_shop import UpdateShop
 from src.service.shop import ShopServiceInterface
@@ -29,11 +28,7 @@ async def create_shop(request: CreateShop = Body(...),
                       shop_service: ShopServiceInterface = Depends(
                           Provide[Container.shop_service]),
                       ):
-    shop_request = request.model_dump(by_alias=True)
-    shop_request["user_id"] = user_data["id"]
-    shop = Shop(**shop_request)
-
-    result = await shop_service.create_shop(shop)
+    result = await shop_service.create_shop(request, user_data["id"])
 
     if not result:
         raise HTTPException(status_code=400, detail="Shop already exists")
@@ -48,12 +43,7 @@ async def update_shop(shop_id: str,
                       shop_service: ShopServiceInterface = Depends(
                           Provide[Container.shop_service]),
                       ):
-    shop_request = request.model_dump(by_alias=True)
-    shop_request["id"] = shop_id
-    shop_request["user_id"] = user_data["id"]
-    shop = Shop(**shop_request)
-
-    result = await shop_service.update(shop)
+    result = await shop_service.update(request, shop_id, user_data["id"])
 
     if not result:
         raise HTTPException(

@@ -4,15 +4,17 @@ from typing import Optional
 from bson import ObjectId
 from motor.motor_asyncio import AsyncIOMotorCollection
 from src.models.shop import Shop
+from src.request.create_shop import CreateShop
+from src.request.update_shop import UpdateShop
 
 
 class ShopRepositoryInterface(ABC):
     @abstractmethod
-    def create_shop(self, shop: Shop) -> Optional[Shop]:
+    def create_shop(self, request: CreateShop, user_id: int) -> Optional[Shop]:
         pass
 
     @abstractmethod
-    def update(self, shop: Shop) -> Optional[Shop]:
+    def update(self, request: UpdateShop, shop_id: str, user_id: int) -> Optional[Shop]:
         pass
 
     @abstractmethod
@@ -25,16 +27,17 @@ class ShopRepository(ShopRepositoryInterface):
     def __init__(self, collection: AsyncIOMotorCollection):
         self.collection = collection
 
-    async def create_shop(self, shop: Shop) -> Optional[Shop]:
+    async def create_shop(self, request: CreateShop, user_id: int) -> Optional[Shop]:
         # Check if the shop already exists
-        isExist = await self.collection.find_one({"user_id": shop.user_id})
+        isExist = await self.collection.find_one({"user_id": user_id})
 
         if isExist:
             return None
 
         # Insert the shop
-        data = shop.model_dump(by_alias=True, exclude=["id"])
-        inserted_shop = await self.collection.insert_one(data)
+        data = request.model_dump(by_alias=True)
+        shop = Shop(**data, user_id=user_id)
+        inserted_shop = await self.collection.insert_one(shop)
 
         # Get the inserted shop
         shop_result = await self.collection.find_one(
@@ -43,8 +46,8 @@ class ShopRepository(ShopRepositoryInterface):
         res = Shop(**shop_result)
         return res.dict_without_timestamps()
 
-    async def update(self, shop: Shop) -> Optional[Shop]:
-        shop_id = ObjectId(shop.id)
+    async def update(self, request: UpdateShop, shop_id: str, user_id: int) -> Optional[Shop]:
+        shop_id = ObjectId(shop_id)
 
         # Check if the shop exists
         isExist = await self.collection.find_one({"_id": shop_id})
@@ -52,12 +55,12 @@ class ShopRepository(ShopRepositoryInterface):
             return None
 
         # Check user is the owner of the shop
-        isOwner = isExist.get("user_id") == shop.user_id
+        isOwner = isExist.get("user_id") == user_id
         if not isOwner:
             return None
 
         # Check data is needed to update
-        data = shop.model_dump(by_alias=True, exclude=["id", "user_id"])
+        data = request.model_dump(by_alias=True)
         update_data = {key: value for key,
                        value in data.items() if value is not None}
         if not update_data:
