@@ -35,9 +35,10 @@ class ShopRepository(ShopRepositoryInterface):
             return None
 
         # Insert the shop
-        data = request.model_dump(by_alias=True)
-        shop = Shop(**data, user_id=user_id)
-        inserted_shop = await self.collection.insert_one(shop)
+        request_data = request.model_dump(by_alias=True)
+        shop = Shop(**request_data, user_id=user_id)
+        data = shop.model_dump(by_alias=True, exclude=["id"])
+        inserted_shop = await self.collection.insert_one(data)
 
         # Get the inserted shop
         shop_result = await self.collection.find_one(
