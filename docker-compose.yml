@@ -175,6 +175,7 @@ services:
     volumes:
       - ./product_service:/app
       - /app/node_modules
+      - /app/dist
 
 volumes:
   mysql-db:
