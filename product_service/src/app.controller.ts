@@ -7,13 +7,13 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get('/health')
-  getHello(): string {
-    return this.appService.getHello();
+  health(): string {
+    return 'OK';
   }
 
   @Get('/products')
   getProducts(): string {
-    return '';
+    return this.appService.getProducts();
   }
 
   @Get('/products/:id')

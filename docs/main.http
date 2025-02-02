@@ -77,3 +77,11 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpY
 
 ### Health check
 GET http://localhost/api/shop_service/v1/health
+
+## Product service
+
+### Health check
+GET http://localhost/api/product_service/v1/health
+
+### Get products
+GET http://localhost/api/product_service/v1/products
