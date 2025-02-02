@@ -1,0 +1,79 @@
+# Request
+
+## Auth service
+
+## Health check
+GET http://localhost/api/auth_service/v1/health
+
+### Register
+POST http://localhost/api/auth_service/v1/register
+Content-Type: application/json
+
+{
+    "email": "test@test.com",
+    "password": "12345678"
+}
+
+### Login
+POST http://localhost/api/auth_service/v1/login
+Content-Type: application/json
+
+{
+    "email": "test@test.com",
+    "password": "12345678"
+}
+
+### Logout
+GET http://localhost/api/auth_service/v1/logout
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE3Mzg1MDc0OTMsImV4cCI6MTczODUxMTA5MywidHlwZSI6IkFDQ0VTU19UT0tFTiJ9.-bscyHvP0fvkNLcwI96KkfbOfjwMMzupa2KaZSqCPKg
+
+### Refresh
+POST http://localhost/api/auth_service/v1/refresh
+Content-Type: application/json
+
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE3Mzg1MDc0OTMsImV4cCI6MTczODUxMTA5MywidHlwZSI6IkFDQ0VTU19UT0tFTiJ9.-bscyHvP0fvkNLcwI96KkfbOfjwMMzupa2KaZSqCPKg"
+}
+
+### Me
+GET http://localhost/api/auth_service/v1/me
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE3Mzg1MDc0OTMsImV4cCI6MTczODUxMTA5MywidHlwZSI6IkFDQ0VTU19UT0tFTiJ9.-bscyHvP0fvkNLcwI96KkfbOfjwMMzupa2KaZSqCPKg
+
+### Verify
+GET http://localhost/api/auth_service/v1/verify-token
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE3Mzg1MDc0OTMsImV4cCI6MTczODUxMTA5MywidHlwZSI6IkFDQ0VTU19UT0tFTiJ9.-bscyHvP0fvkNLcwI96KkfbOfjwMMzupa2KaZSqCPKg
+
+## User service
+
+### Health check
+GET http://localhost/api/user_service/v1/health
+
+### Create or update user
+POST http://localhost/api/user_service/v1/profiles
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE3Mzg1MDc0OTMsImV4cCI6MTczODUxMTA5MywidHlwZSI6IkFDQ0VTU19UT0tFTiJ9.-bscyHvP0fvkNLcwI96KkfbOfjwMMzupa2KaZSqCPKg
+
+{
+    "first_name": "Manh",
+    "last_name": "Pham",
+    "phone": "0972004788",
+    "address": "HN"
+}
+
+### me
+GET http://localhost/api/user_service/v1/profiles/me
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE3Mzg1MDc0OTMsImV4cCI6MTczODUxMTA5MywidHlwZSI6IkFDQ0VTU19UT0tFTiJ9.-bscyHvP0fvkNLcwI96KkfbOfjwMMzupa2KaZSqCPKg
+
+### Get user by id
+GET http://localhost/api/user_service/v1/profiles/1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE3Mzg1MDc0OTMsImV4cCI6MTczODUxMTA5MywidHlwZSI6IkFDQ0VTU19UT0tFTiJ9.-bscyHvP0fvkNLcwI96KkfbOfjwMMzupa2KaZSqCPKg
+
+## Shop service
+
+### Health check
+GET http://localhost/api/shop_service/v1/health
