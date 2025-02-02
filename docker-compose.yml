@@ -135,7 +135,49 @@ services:
     volumes:
       - ./shop_service:/app
 
+  product_service_database:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: toor
+      MYSQL_DATABASE: product_service
+    ports:
+      - "3307:3306"
+    volumes:
+      - product-mysql-db:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 30s
+      timeout: 30s
+      retries: 10
+      start_period: 30s
+
+  product_service:
+    build:
+      context: product_service
+      dockerfile: docker/Dockerfile
+    ports:
+      - "5000:5000"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "curl",
+          "-f",
+          "http://localhost:5000/api/product_service/v1/health",
+        ]
+      interval: 30s
+      timeout: 30s
+      retries: 10
+      start_period: 30s
+    depends_on:
+      product_service_database:
+        condition: service_healthy
+    volumes:
+      - ./product_service:/app
+      - /app/node_modules
+
 volumes:
   mysql-db:
   postgres-db:
   mongodb-db:
+  product-mysql-db:
