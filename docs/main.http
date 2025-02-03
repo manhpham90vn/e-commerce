@@ -1,60 +1,77 @@
 # Request
 
+@baseUrl =  http://localhost/api
+
 ## Auth service
+@auth = auth_service/v1
 
 ## Health check
-GET http://localhost/api/auth_service/v1/health
+GET {{baseUrl}}/{{auth}}/health
 
 ### Register
-POST http://localhost/api/auth_service/v1/register
+# @name register
+POST {{baseUrl}}/{{auth}}/register
 Content-Type: application/json
 
 {
-    "email": "test@test.com",
+    "email": "test5@test.com",
     "password": "12345678"
 }
+
+### Get token
+
+@token = {{ register.response.body.data.accessToken }}
+@refresh = {{ register.response.body.data.refreshToken }}
 
 ### Login
-POST http://localhost/api/auth_service/v1/login
+# @name login
+POST {{baseUrl}}/{{auth}}/login
 Content-Type: application/json
 
 {
-    "email": "test@test.com",
+    "email": "test5@test.com",
     "password": "12345678"
 }
 
+### Get token
+
+@token = {{ login.response.body.data.accessToken }}
+@refresh = {{ login.response.body.data.refreshToken }}
+
 ### Logout
-GET http://localhost/api/auth_service/v1/logout
+GET {{baseUrl}}/{{auth}}/logout
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE3Mzg1MDc0OTMsImV4cCI6MTczODUxMTA5MywidHlwZSI6IkFDQ0VTU19UT0tFTiJ9.-bscyHvP0fvkNLcwI96KkfbOfjwMMzupa2KaZSqCPKg
+Authorization: Bearer {{ token }}
 
 ### Refresh
-POST http://localhost/api/auth_service/v1/refresh
+POST {{baseUrl}}/{{auth}}/refresh
 Content-Type: application/json
 
 {
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE3Mzg1MDc0OTMsImV4cCI6MTczODUxMTA5MywidHlwZSI6IkFDQ0VTU19UT0tFTiJ9.-bscyHvP0fvkNLcwI96KkfbOfjwMMzupa2KaZSqCPKg"
+  "token": "{{ refresh }}"
 }
 
 ### Me
-GET http://localhost/api/auth_service/v1/me
+GET {{baseUrl}}/{{auth}}/me
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE3Mzg1MDc0OTMsImV4cCI6MTczODUxMTA5MywidHlwZSI6IkFDQ0VTU19UT0tFTiJ9.-bscyHvP0fvkNLcwI96KkfbOfjwMMzupa2KaZSqCPKg
+Authorization: Bearer {{ token }}
 
 ### Verify
-GET http://localhost/api/auth_service/v1/verify-token
+GET {{baseUrl}}/{{auth}}/verify-token
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE3Mzg1MDc0OTMsImV4cCI6MTczODUxMTA5MywidHlwZSI6IkFDQ0VTU19UT0tFTiJ9.-bscyHvP0fvkNLcwI96KkfbOfjwMMzupa2KaZSqCPKg
+Authorization: Bearer {{ token }}
 
 ## User service
 
+@user = user_service/v1
+
 ### Health check
-GET http://localhost/api/user_service/v1/health
+GET {{baseUrl}}/{{user}}/health
 
 ### Create or update user
-POST http://localhost/api/user_service/v1/profiles
+POST {{baseUrl}}/{{user}}/profiles
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE3Mzg1MDc0OTMsImV4cCI6MTczODUxMTA5MywidHlwZSI6IkFDQ0VTU19UT0tFTiJ9.-bscyHvP0fvkNLcwI96KkfbOfjwMMzupa2KaZSqCPKg
+Authorization: Bearer {{ token }}
 
 {
     "first_name": "Manh",
@@ -64,24 +81,28 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpY
 }
 
 ### me
-GET http://localhost/api/user_service/v1/profiles/me
+GET {{baseUrl}}/{{user}}/profiles
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE3Mzg1MDc0OTMsImV4cCI6MTczODUxMTA5MywidHlwZSI6IkFDQ0VTU19UT0tFTiJ9.-bscyHvP0fvkNLcwI96KkfbOfjwMMzupa2KaZSqCPKg
+Authorization: Bearer {{ token }}
 
 ### Get user by id
-GET http://localhost/api/user_service/v1/profiles/1
+GET {{baseUrl}}/{{user}}/profiles/1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE3Mzg1MDc0OTMsImV4cCI6MTczODUxMTA5MywidHlwZSI6IkFDQ0VTU19UT0tFTiJ9.-bscyHvP0fvkNLcwI96KkfbOfjwMMzupa2KaZSqCPKg
+Authorization: Bearer {{ token }}
 
 ## Shop service
 
+@shop = shop_service/v1
+
 ### Health check
-GET http://localhost/api/shop_service/v1/health
+GET {{baseUrl}}/{{shop}}/health
 
 ## Product service
 
+@product = product_service/v1
+
 ### Health check
-GET http://localhost/api/product_service/v1/health
+GET {{baseUrl}}/{{product}}/health
 
 ### Get products
-GET http://localhost/api/product_service/v1/products
+GET {{baseUrl}}/{{product}}/products
