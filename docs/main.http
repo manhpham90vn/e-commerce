@@ -1,11 +1,9 @@
-# Request
+### Auth service
 
 @baseUrl =  http://localhost/api
-
-## Auth service
 @auth = auth_service/v1
 
-## Health check
+### Health check
 GET {{baseUrl}}/{{auth}}/health
 
 ### Register
@@ -14,12 +12,11 @@ POST {{baseUrl}}/{{auth}}/register
 Content-Type: application/json
 
 {
-    "email": "test5@test.com",
+    "email": "test@test.com",
     "password": "12345678"
 }
 
 ### Get token
-
 @token = {{ register.response.body.data.accessToken }}
 @refresh = {{ register.response.body.data.refreshToken }}
 
@@ -34,7 +31,6 @@ Content-Type: application/json
 }
 
 ### Get token
-
 @token = {{ login.response.body.data.accessToken }}
 @refresh = {{ login.response.body.data.refreshToken }}
 
@@ -61,7 +57,7 @@ GET {{baseUrl}}/{{auth}}/verify-token
 Content-Type: application/json
 Authorization: Bearer {{ token }}
 
-## User service
+### User service
 
 @user = user_service/v1
 
@@ -90,14 +86,14 @@ GET {{baseUrl}}/{{user}}/profiles/1
 Content-Type: application/json
 Authorization: Bearer {{ token }}
 
-## Shop service
+### Shop service
 
 @shop = shop_service/v1
 
 ### Health check
 GET {{baseUrl}}/{{shop}}/health
 
-## Product service
+### Product service
 
 @product = product_service/v1
 

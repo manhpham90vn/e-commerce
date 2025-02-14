@@ -6,7 +6,7 @@ ENV PYTHONDONTWRITEBYTECODE=1
 
 RUN pip install pipx
 
-RUN pipx install poetry
+RUN pipx install uv
 
 ENV PATH="/root/.local/bin:${PATH}"
 

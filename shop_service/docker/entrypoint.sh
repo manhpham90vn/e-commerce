@@ -1,5 +1,5 @@
 #!/bin/sh
 
-poetry install
+uv sync
 
-poetry run uvicorn src.main:app --reload --host 0.0.0.0 --port 8080
+uv run uvicorn src.main:app --reload --host 0.0.0.0 --port 8080
